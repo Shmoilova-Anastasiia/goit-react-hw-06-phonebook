@@ -2,7 +2,8 @@ import React from 'react';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import PropTypes from 'prop-types';
-
+import { toast } from 'react-toastify';
+import { BsPersonAdd } from 'react-icons/bs';
 import {
   Form,
   FormField,
@@ -11,6 +12,20 @@ import {
   StyledButton,
   LabelWrapper,
 } from './ContactForm.styled';
+import { useDispatch, useSelector } from 'react-redux';
+import { getContacts, getFilteredContacts } from 'redux/contactSelector';
+import { addContact } from 'redux/contactSlice';
+
+const notifyOptions = {
+  position: 'bottom-left',
+  autoClose: 5000,
+  hideProgressBar: false,
+  closeOnClick: true,
+  pauseOnHover: true,
+  draggable: true,
+  progress: undefined,
+  theme: 'colored',
+};
 
 const schema = yup.object().shape({
   name: yup
@@ -31,7 +46,16 @@ const schema = yup.object().shape({
     .required(),
 });
 
-export const ContactForm = ({ onAddContact }) => {
+export const ContactForm = () => {
+  const contacts = useSelector(getContacts);
+  const dispatch = useDispatch();
+
+  const onAddContact = ({ name, number }) => {
+    if (getFilteredContacts({ name, number })) {
+      return toast.error(`This contact is already in contacts`, notifyOptions);
+    }
+    dispatch(addContact({ name, number }));
+  };
   return (
     <Formik
       initialValues={{
@@ -39,18 +63,15 @@ export const ContactForm = ({ onAddContact }) => {
         number: '',
       }}
       onSubmit={(values, { resetForm }) => {
-        
         onAddContact({ ...values });
-        
+
         resetForm();
       }}
       validationSchema={schema}
     >
       <Form autoComplete="off">
         <FormField htmlFor="name">
-          <LabelWrapper>
-            Name
-          </LabelWrapper>
+          <LabelWrapper>Name</LabelWrapper>
           <FieldFormik
             type="text"
             name="name"
@@ -61,9 +82,7 @@ export const ContactForm = ({ onAddContact }) => {
           <ErrorMessage name="name" component="span" />
         </FormField>
         <FormField htmlFor="number">
-          <LabelWrapper>
-             Number
-          </LabelWrapper>
+          <LabelWrapper>Number</LabelWrapper>
           <FieldFormik
             type="tel"
             name="number"
@@ -74,6 +93,9 @@ export const ContactForm = ({ onAddContact }) => {
           <ErrorMessage name="number" component="span" />
         </FormField>
         <StyledButton type="submit">
+          <span>
+            <BsPersonAdd />
+          </span>
           Add contact
         </StyledButton>
       </Form>

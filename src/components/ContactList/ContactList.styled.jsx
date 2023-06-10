@@ -1,4 +1,4 @@
-import styled from '@emotion/styled'
+import styled from '@emotion/styled';
 
 export const List = styled.ul`
   display: flex;
@@ -26,6 +26,9 @@ width: 50px;
 padding: 5px;
 cursor: pointer;
 
+
 &:hover {
+  color: #de3d32;
     border-color: #de3d32;
+    box-shadow: 0 3px 3px 0px #de3d32;
 `;
