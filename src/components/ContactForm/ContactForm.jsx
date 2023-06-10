@@ -12,8 +12,8 @@ import {
   StyledButton,
   LabelWrapper,
 } from './ContactForm.styled';
-import { useDispatch, useSelector } from 'react-redux';
-import { getContacts, getFilteredContacts } from 'redux/contactSelector';
+import { useDispatch } from 'react-redux';
+import { getFilteredContacts } from 'redux/contactSelector';
 import { addContact } from 'redux/contactSlice';
 
 const notifyOptions = {
@@ -47,7 +47,7 @@ const schema = yup.object().shape({
 });
 
 export const ContactForm = () => {
-  const contacts = useSelector(getContacts);
+  // const contacts = useSelector(getContacts);
   const dispatch = useDispatch();
 
   const onAddContact = ({ name, number }) => {
