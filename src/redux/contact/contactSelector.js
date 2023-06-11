@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify';
 
-const notifyOptions = {
+const toastifyOptions = {
   position: 'bottom-left',
   autoClose: 5000,
   hideProgressBar: false,
@@ -9,6 +9,7 @@ const notifyOptions = {
   draggable: true,
   progress: undefined,
   theme: 'colored',
+  toastId: 'custom-id-yes',
 };
 
 export const getContacts = store => store.contacts;
@@ -21,14 +22,12 @@ export const getFilteredContacts = store => {
   const normalizedFilter = filter.toLowerCase();
   const filteredContacts = contacts.filter(
     contact =>
-      contact.name.toLowerCase().includes(normalizedFilter) ||
+      contact.name.toLowerCase().trim().includes(normalizedFilter) ||
       contact.number.trim().includes(normalizedFilter)
   );
 
   if (normalizedFilter && !filteredContacts.length) {
-    toast.warn(`No contacts matching your request`, notifyOptions);
+    toast.warn(`No contacts matching your request`, toastifyOptions);
   }
   return filteredContacts;
 };
-
-export const getFilter = store => store.filter;

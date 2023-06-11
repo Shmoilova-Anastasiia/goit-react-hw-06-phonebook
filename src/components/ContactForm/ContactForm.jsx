@@ -1,8 +1,10 @@
 import React from 'react';
 import { Formik } from 'formik';
 import * as yup from 'yup';
+
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { BsPersonAdd } from 'react-icons/bs';
 import {
   Form,
@@ -12,11 +14,11 @@ import {
   StyledButton,
   LabelWrapper,
 } from './ContactForm.styled';
-import { useDispatch } from 'react-redux';
-import { getFilteredContacts } from 'redux/contactSelector';
-import { addContact } from 'redux/contactSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { addContact } from 'redux/contact/contactSlice';
+import { getContacts } from 'redux/contact/contactSelector';
 
-const notifyOptions = {
+const toastifyOptions = {
   position: 'bottom-left',
   autoClose: 5000,
   hideProgressBar: false,
@@ -38,22 +40,28 @@ const schema = yup.object().shape({
     .required(),
   number: yup
     .string()
-    .trim()
-    .matches(
-      /\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}/,
-      'Phone number must be digits and can contain spaces, dashes, parentheses and can start with +'
-    )
+
     .required(),
 });
 
 export const ContactForm = () => {
-  // const contacts = useSelector(getContacts);
+  const contacts = useSelector(getContacts);
   const dispatch = useDispatch();
 
   const onAddContact = ({ name, number }) => {
-    if (getFilteredContacts({ name, number })) {
-      return toast.error(`This contact is already in contacts`, notifyOptions);
+    const findName = contacts.find(
+      contact => contact.name.toLowerCase().trim() === name.toLowerCase().trim()
+    );
+    if (findName) {
+      toast.error(`${name}: is already in contacts`, toastifyOptions);
+      return;
     }
+    const findNumber = contacts.find(contact => contact.number === number);
+    if (findNumber) {
+      toast.error(`This phone number is already in use.`, toastifyOptions);
+      return;
+    }
+
     dispatch(addContact({ name, number }));
   };
   return (
@@ -72,25 +80,17 @@ export const ContactForm = () => {
       <Form autoComplete="off">
         <FormField htmlFor="name">
           <LabelWrapper>Name</LabelWrapper>
-          <FieldFormik
-            type="text"
-            name="name"
-            pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-            title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-            required
-          />
+          <FieldFormik type="text" name="name" placeholder="Name" required />
           <ErrorMessage name="name" component="span" />
         </FormField>
         <FormField htmlFor="number">
           <LabelWrapper>Number</LabelWrapper>
-          <FieldFormik
-            type="tel"
+          <FieldFormik type="tel" name="number" required />
+          <ErrorMessage
             name="number"
-            pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-            title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-            required
+            component="span"
+            placeholder="+38-050-123-45-67"
           />
-          <ErrorMessage name="number" component="span" />
         </FormField>
         <StyledButton type="submit">
           <span>

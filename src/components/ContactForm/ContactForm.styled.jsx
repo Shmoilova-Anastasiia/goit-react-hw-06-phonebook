@@ -10,6 +10,9 @@ export const Form = styled(FormikForm)`
 
   padding: 10px;
   justify-content: center;
+  box-shadow: 0 5px 5px 0px #008000;
+  border-radius: 20px;
+  margin-bottom: 20px;
 `;
 
 export const FormField = styled.label`

@@ -8,6 +8,20 @@ export const Container = styled.div`
   margin: auto;
 `;
 
+export const FilterContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  max-width: 100%;
+
+  padding: 10px;
+  justify-content: center;
+  box-shadow: 0 5px 5px 0px #008000;
+  border-radius: 20px;
+  margin-bottom: 20px;
+`;
+
 export const Section = styled.section`
   padding: 30px;
   &:not(:last-child) {

@@ -3,8 +3,9 @@ import { Input, LabelDescr } from './Filter.styled';
 import { LabelWrapper } from '../ContactForm/ContactForm.styled';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { getFilter } from 'redux/contactSelector';
-import { setFilter } from 'redux/contactSlice';
+
+import { setFilter } from 'redux/filter/filterSlice';
+import { getFilter } from 'redux/filter/filterSelector';
 
 const Filter = () => {
   const filter = useSelector(getFilter);

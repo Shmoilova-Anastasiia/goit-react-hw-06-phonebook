@@ -1,8 +1,8 @@
 import React from 'react';
 import { Btn, Item, List } from './ContactList.styled';
 import { useDispatch, useSelector } from 'react-redux';
-import { getFilteredContacts } from 'redux/contactSelector';
-import { deleteContact } from 'redux/contactSlice';
+import { getFilteredContacts } from 'redux/contact/contactSelector';
+import { deleteContact } from 'redux/contact/contactSlice';
 import { TiDelete } from 'react-icons/ti';
 
 export const ContactList = () => {
