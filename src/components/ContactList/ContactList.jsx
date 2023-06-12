@@ -1,21 +1,27 @@
 import React from 'react';
 import { Btn, Item, List } from './ContactList.styled';
 import { useDispatch, useSelector } from 'react-redux';
-import { getFilteredContacts } from 'redux/contact/contactSelector';
+import { getContacts } from 'redux/contact/contactSelector';
 import { deleteContact } from 'redux/contact/contactSlice';
 import { TiDelete } from 'react-icons/ti';
+import { getFilter } from 'redux/filter/filterSelector';
 
 export const ContactList = () => {
-  const filteredContacts = useSelector(getFilteredContacts);
+  const contacts = useSelector(getContacts);
   const dispatch = useDispatch();
+  const filter = useSelector(getFilter);
 
   const onDelete = contactId => {
     dispatch(deleteContact(contactId));
   };
 
+  const filterContacts = contacts.filter(contact =>
+    contact.name.toLowerCase().includes(filter.toLowerCase())
+  );
+
   return (
     <List>
-      {filteredContacts.map(({ name, number, id }) => {
+      {filterContacts.map(({ name, number, id }) => {
         return (
           <Item key={id}>
             <span>{name}:</span>
